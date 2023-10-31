@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room - Public</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8">
+                <!-- Ruang Chat -->
+                <div class="card">
+                    <div class="card-header">
+                        Chat Room Public
+                    </div>
+                    <div class="card-body" id="chatMessages">
+                        <!-- Pesan-pesan akan ditampilkan di sini -->
+                    </div>
+                    <div class="card-footer">
+                        <input type="text" id="messageInput" class="form-control" placeholder="Ketik pesan Anda">
+                        <button onclick="kirimPesan()" class="btn btn-primary mt-2">Kirim Pesan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script> <!-- Ganti path sesuai dengan pengaturan server Anda -->
+
+    <script>
+        // Inisialisasi socket.io
+        const socket = io();
+
+        // Fungsi untuk mengirim pesan
+        function kirimPesan() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value;
+            messageInput.value = '';
+
+            // Kirim pesan ke server
+            socket.emit('chatMessage', { message });
+        }
+
+        // Menampilkan pesan di layar
+        function tampilkanPesan(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageElement = document.createElement('p');
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+        }
+
+        // Event listener untuk menerima pesan dari server
+        socket.on('chatMessage', (data) => {
+            tampilkanPesan(data.message);
+        });
+    </script>
+</body>
+</html>

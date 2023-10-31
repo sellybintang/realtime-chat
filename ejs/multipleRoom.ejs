@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <!-- Daftar Ruangan -->
+                <h2>Ruangan</h2>
+                <ul id="roomList" class="list-group">
+                    <li class="list-group-item" onclick="pilihRuangan('roomPublic')" style="cursor: pointer;">Chat Room Public</li>
+                    <li class="list-group-item" onclick="pilihRuangan('roomPrivate')" style="cursor: pointer;" action >Chat Private</li>
+                    <!-- Tambahkan ruangan lain jika diperlukan -->
+                </ul>
+            </div>
+            
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Fungsi untuk memilih ruangan
+
+        function pilihRuangan(namaRuangan) {
+            if(namaRuangan==='roomPublic'){
+                console.log('Menuju ke halaman chat public');
+                window.location.href='/roompublic'
+            }else if (namaRuangan ==='roomPrivate'){
+
+                console.log('Menuju ke halaman chat public');
+                window.location.href='/chatprivate'
+            }
+          }
+          
+        // Implementasikan logika JavaScript Anda di sini untuk berkomunikasi dengan server dan mengelola pesan.
+        // Anda akan membutuhkan JavaScript untuk mengganti ruangan, menerima/mengirim pesan, dll.
+        // Jangan lupa untuk mengatur id dan kelas sesuai dengan logika Anda.
+    </script>
+</body>
+</html>
+

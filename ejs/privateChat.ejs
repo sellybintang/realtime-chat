@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Private Chat</title>
+</head>
+<body>
+  <h1>Private Chat App</h1>
+  <div>
+    <label for="from">Dari :</label>
+    <input type="text" id="from" />
+  </div>
+  <div>
+    <label for="to">Kepada :</label>
+    <input type="text" id="to" />
+  </div>
+
+  <div>
+    <label for="message">Pesan:</label>
+    <input type="text" id="message" />
+  </div>
+
+  <button type="button" id="sendMessageButton">Kirim Pesan</button>
+
+  <div id="chat">
+    <!-- Ini adalah area tampilan pesan yang akan diperbarui secara dinamis -->
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const socket = io();
+      socket.on('connect', () => {
+        const namaFrom = document.getElementById('from').value;
+        const namaTo = document.getElementById('to').value;
+        socket.emit('join', {from: namaFrom, to:namaTo});
+      });
+      document.getElementById('sendMessageButton').addEventListener('click', async function () {
+        const from = document.getElementById('from').value;
+        const to = document.getElementById('to').value;
+        const message = document.getElementById('message').value;
+        const isToValid = validateToName(to);
+        const isFromValid = validateToName(from);
+
+        if (!isToValid) {
+          alert("Nama penerima tidak valid");
+          return;
+        }
+
+        if ( !isFromValid) {
+          alert("Nama pengirim tidak valid");
+          return;
+        }
+       
+        const fromResponse =await fetch(`/sendprivate?nama=${encodeURIComponent(from)}`);
+        const toResponse = await fetch(`/sendprivate?nama=${encodeURIComponent(to)}`);
+        if (!fromResponse.ok || !toResponse.ok) {
+          alert('Request Failed');
+          return;
+        }
+        
+
+        const fromData =await fromResponse.json();
+        const toData = await toResponse.json();
+
+
+        if (toData.isValid&& fromData.isValid) {
+          socket.emit('private_message', { from,to, message });
+          const chat = document.getElementById('chat');
+          chat.innerHTML += `<p><strong>${to}</strong> ${data.message}</p>`
+          document.getElementById('message').value = '';
+        } else {
+          alert("Nama Pengguna tidak ada");
+        }
+
+        
+      });
+
+      function validateToName(nama) {
+        return nama.trim() !== "";
+      }
+
+      socket.on('private_message', (data) => {
+        const chat = document.getElementById('chat');
+        chat.innerHTML += `<p><strong>${data.from}:</strong> ${data.message}</p>`;
+      });
+    });
+  </script>
+</body>
+</html>
